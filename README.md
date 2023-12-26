@@ -111,3 +111,30 @@
             }
         }
 ```
+
+Cách để gọi hàm private từ 1 object khác ( ko cùng project vẫn đc )
+
+```C#
+        [Test()]
+        public void T13_Insert()
+        {
+            SqlConnection cn = new SqlConnection(DBAccess.GetConnectionString(commonData));
+            cn.Open();
+            SqlTransaction tx = cn.BeginTransaction();
+
+            Type[] parameterTypes = new Type[] { typeof(CommonData), typeof(IF_ZH_CM_01_S01_SearchCondition), typeof(IF_ZH_CM_01_S01_RowData), typeof(SqlConnection), typeof(SqlTransaction) };
+
+            var methodInfo = typeof(BL_ZH_CM_01_S01).GetMethod("Insert", BindingFlags.NonPublic | BindingFlags.Static, null, parameterTypes, null);
+
+            IF_ZH_CM_01_S01_SearchCondition searchCondition = new IF_ZH_CM_01_S01_SearchCondition();
+            searchCondition.CreditLimitType = "150";
+
+            IF_ZH_CM_01_S01_RowData rowData = new IF_ZH_CM_01_S01_RowData();
+            rowData.AccountCode = "113200";
+            rowData.CreditLimitType = "150";
+
+            methodInfo.Invoke(null, new object[] { commonData, searchCondition, rowData, cn, tx });
+            tx.Rollback();
+            cn.Close();
+        }
+```
