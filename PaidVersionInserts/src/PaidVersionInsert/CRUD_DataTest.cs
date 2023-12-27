@@ -96,7 +96,7 @@ namespace PaidVersionInsert
         /// <param name="tableName"></param>
         /// <param name="dbName"></param>
         /// <returns></returns>
-        public CommonResult Select(Dictionary<string, object> dicCondition, string tableName, string dbName, List<String> output = null)
+        public CommonResult Select(Dictionary<string, object> dicCondition, string tableName, string dbName, List<String> output = null, int top = 0)
         {
             CommonResult commonResult = new CommonResult();
             try
@@ -112,6 +112,10 @@ namespace PaidVersionInsert
                 try
                 {
                     sb.Append($" SELECT ");
+                    if(top != 0)
+                    {
+                        sb.Append($" top({top}) ");
+                    }
                     if (output != null && output.Count > 0)
                     {
 

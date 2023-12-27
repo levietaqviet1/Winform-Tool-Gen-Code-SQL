@@ -59,3 +59,13 @@ C:\Code\MRBN-Grandit\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVers
 C:\Code\MRBN-Grandit\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.csproj.CoreCompileInputs.cache
 C:\Code\MRBN-Grandit\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.exe
 C:\Code\MRBN-Grandit\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.pdb
+C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\bin\Debug\PaidVersionInsert.exe.config
+C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\bin\Debug\PaidVersionInsert.exe
+C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\bin\Debug\PaidVersionInsert.pdb
+C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.Form1.resources
+C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.Properties.Resources.resources
+C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.SettingDB.resources
+C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.csproj.GenerateResource.cache
+C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.exe
+C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.pdb

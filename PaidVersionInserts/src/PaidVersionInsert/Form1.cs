@@ -19,6 +19,7 @@ namespace PaidVersionInsert
         private string dbName;
         private string dicInsertName;
         private CRUD_DataTest crudData;
+        private CommonResult result;
         private InFoDatabase inFoDatabase;
         private Utills utills = new Utills();
 
@@ -79,11 +80,16 @@ namespace PaidVersionInsert
         private void Validate()
         {
             CheckConnectSQL();
-            tableName = txtTableName.Text.Trim();
-            if (tableName.Contains("[") && tableName.Contains("]"))
+            tableName = cboTableName.Text as string;
+            if (tableName != null && tableName.Contains("[") && tableName.Contains("]"))
             {
                 tableName = tableName.Substring(1, tableName.Length - 2);
             }
+            if(tableName is null)
+            {
+                tableName = "";
+            }
+
             if (cboKeyCondition.SelectedValue != null)
             {
                 keyCondition = cboKeyCondition.SelectedValue.ToString().Trim() ?? "";
@@ -95,7 +101,6 @@ namespace PaidVersionInsert
             valueCondition = txtValueCondition.Text.Trim();
             dbName = cboDbName.SelectedValue.ToString().Trim() ?? "";
 
-            txtTableName.Text = tableName;
             txtValueCondition.Text = valueCondition;
         }
 
@@ -118,7 +123,7 @@ namespace PaidVersionInsert
 
             if (cbDefaultName.Checked == true)
             {
-                dicInsertName = ConvertToCamelCase(tableName);
+                dicInsertName = "dicData" + ConvertToCamelCase(tableName);
             }
             if (String.IsNullOrEmpty(txtNameDictionary.Text.Trim()))
             {
@@ -146,7 +151,7 @@ namespace PaidVersionInsert
                 output += char.ToUpper(input[0]) + input.Substring(1).ToLower();
             }
 
-            return "dicData" + output;
+            return output;
         }
 
         /// <summary>
@@ -189,16 +194,16 @@ namespace PaidVersionInsert
                     }
                 }
             }
-
-            //using (SqlConnection con = new SqlConnection(connectionString))
-            //using (SqlCommand cmd = con.CreateCommand())
-            //{
-            //    cmd.CommandText = "SELECT Pnt_Lname FROM PATIENT WHERE Pnt_ID = 1";
-            //    con.Open();
-            //    txtBox1.Text = cmd.ExecuteScalar() as string;
-            //}
-
-            var result = crudData.Select(selectCondition, tableName, dbName, outputSelect);
+            CommonResult result;
+            if (cbValueTop1.Checked)
+            {
+                result = crudData.Select(null, tableName, dbName, outputSelect, 1);
+            }
+            else
+            {
+                result = crudData.Select(selectCondition, tableName, dbName, outputSelect);
+            }
+            
             if (result.Data.Rows.Count != 0)
             {
                 output.Append($"#region {tableName} \n");
@@ -238,6 +243,7 @@ namespace PaidVersionInsert
             }
             else
             {
+
                 output.Append($"#region {tableName}\n");
                 output.Append($"Dictionary<string, object> {dicInsertName} = new Dictionary<string, object>();\n");
                 StringBuilder sb = new StringBuilder();
@@ -284,83 +290,53 @@ namespace PaidVersionInsert
         private void Form1_Load(object sender, EventArgs e)
         {
             txtNameDictionary.Text = "dicDataFake";
-            string[] tbs = new string[] { "R_1_1_0_CM", "R_1_1_0_FI", "R_1_1_0_HR", "R_1_1_0_MN", "R_1_1_0_SC", "SSISDB" };
-            cboDbName.DataSource = tbs.ToList();
-            Test();
+            //string[] tbs = new string[] { "R_1_1_0_CM", "R_1_1_0_FI", "R_1_1_0_HR", "R_1_1_0_MN", "R_1_1_0_SC", "SSISDB" };
+            cboDbName.DataSource = GetNameDatabase().ToList();
         }
 
-        private List<string> Test()
+        private List<string> GetNameDatabase()
         {
             List<string> output = new List<string>();
             List<string> select = new List<string>() { "name" };
             StringBuilder sb = new StringBuilder();
-            sb.Append("SELECT name FROM sys.databases where name like 'R%'");
+            //sb.Append("SELECT name FROM sys.databases where name like 'R%'");
+            sb.Append("SELECT name FROM sys.databases");
             CommonResult result = crudData.ExecuteQuery(null, sb);
 
             result = crudData.Select(null, "sys.databases", null, select);
-
-            //using (SqlConnection cn = new SqlConnection($"Data Source={DBServer};User ID={UserServer};Password={PassServer}"))
-            //{
-            //    StringBuilder query = new StringBuilder();
-            //    StringBuilder outputSelect = new StringBuilder();
-            //    query.Append("SELECT name FROM sys.databases where name like 'R%'");
-            //    cn.Open();
-            //    using (SqlCommand command = new SqlCommand(query.ToString(), cn))
-            //    {
-            //        using (SqlDataReader dr = command.ExecuteReader())
-            //        {
-            //            while (dr.Read())
-            //            {
-            //                string columnName = dr.GetString(0);
-            //                output.Add(columnName);
-            //            }
-            //        }
-            //    }
-            //}
+            for (int i = 0; i < result.Data.Rows.Count; i++)
+            {
+                output.Add(result.Data.Rows[i]["name"].ToString());
+            }
             return output;
         }
 
         private void reLoadCondition()
         {
             CheckConnectSQL();
+            Validate();
             string columnCheck = cboColumnNull.Checked == true ? "NO" : "YES";
-            string tableName = txtTableName.Text.Trim();
-            if (tableName.Contains("[") && tableName.Contains("]"))
-            {
-                tableName = tableName.Substring(1, tableName.Length - 2);
-            }
 
             cboKeyCondition.DataSource = null;
-            StringBuilder query = new StringBuilder();
-            List<string> outputSelect = new List<string>();
-            query.Append($"USE {cboDbName.SelectedValue.ToString()} SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{tableName}' ");
-            using (SqlConnection cn = new SqlConnection($"Data Source={inFoDatabase.ServerName};User ID={inFoDatabase.Login};Password={inFoDatabase.Password}"))
+            
+            #region Get key condition
+            Dictionary<string, object> dicCondition = new Dictionary<string, object>();
+            dicCondition["TABLE_NAME"] = tableName;
+
+            result = crudData.Select(dicCondition, "INFORMATION_SCHEMA.COLUMNS", dbName, new List<string>() { "COLUMN_NAME" });
+
+            if(result.Data.Rows.Count > 0)
             {
-                cn.Open();
-                using (SqlCommand command = new SqlCommand(query.ToString(), cn))
-                {
-                    using (SqlDataReader dr = command.ExecuteReader())
-                    {
-                        while (dr.Read())
-                        {
-                            string columnName = dr.GetString(0);
-                            outputSelect.Add(columnName);
-                        }
-                    }
-                }
+                cboKeyCondition.DataSource = result.Data.AsEnumerable()
+                    .Select(row => row.Field<string>("COLUMN_NAME"))
+                    .ToList();
             }
-            cboKeyCondition.DataSource = outputSelect.ToList();
+            else
+            {
+                cboKeyCondition.DataSource = null;
+            }
+            #endregion
         }
-        private void txtTableName_ModifiedChanged(object sender, EventArgs e)
-        {
-            reLoadCondition();
-        }
-
-        private void cboDbName_Leave(object sender, EventArgs e)
-        {
-            reLoadCondition();
-        }
-
         private void btnCopy_Click(object sender, EventArgs e)
         {
             if (!String.IsNullOrEmpty(richTextBox.Text))
@@ -377,6 +353,63 @@ namespace PaidVersionInsert
         {
             this.Hide();
             new SettingDB(false).ShowDialog();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            string text = ConvertToCamelCase(txtNameOldParam.Text.ToString().Trim());
+
+            if(text != null && text.Length > 0)
+            {
+                text = char.ToLower(text[0]) + text.Substring(1);
+            }
+            string newText = "";
+            string rex = "@#$%^&*(){}[]'.!`+/-";
+            foreach (var item in text)
+            {
+                if (!rex.Contains(item))
+                {
+                    newText += item;
+                }
+            }
+            txtNameNewParam.Text = newText;
+        }
+
+        private void cboDbName_TextChanged(object sender, EventArgs e)
+        {
+            Validate();
+            #region Get table name
+            result = crudData.Select(null, "INFORMATION_SCHEMA.TABLES", dbName, new List<string>() { "TABLE_NAME" });
+
+            if (result.Data.Rows.Count > 0)
+            {
+                cboTableName.DataSource = result.Data.AsEnumerable()
+                    .Select(row => row.Field<string>("TABLE_NAME"))
+                    .ToList();
+            }
+            else
+            {
+                cboTableName.DataSource = null;
+            }
+            #endregion
+            reLoadCondition();
+        }
+
+        private void cboTableName_TextChanged(object sender, EventArgs e)
+        {
+            reLoadCondition();
+        }
+
+        private void btnCopyNewParam_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(txtNameNewParam.Text))
+            {
+                Clipboard.SetText(txtNameNewParam.Text);
+                if (cbShowMessCopy.Checked == true)
+                {
+                    MessageBox.Show("Đã sao chép nội dung vào clipboard!");
+                }
+            }
         }
     }
 }

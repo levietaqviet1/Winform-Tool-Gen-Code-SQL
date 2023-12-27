@@ -29,7 +29,6 @@ namespace PaidVersionInsert
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtTableName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -48,15 +47,14 @@ namespace PaidVersionInsert
             this.btnSettingDatabase = new System.Windows.Forms.Button();
             this.cboDefautDataEmpty = new System.Windows.Forms.CheckBox();
             this.cboDataNull = new System.Windows.Forms.CheckBox();
+            this.cbValueTop1 = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtNameOldParam = new System.Windows.Forms.TextBox();
+            this.txtNameNewParam = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.cboTableName = new System.Windows.Forms.ComboBox();
+            this.btnCopyNewParam = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // txtTableName
-            // 
-            this.txtTableName.Location = new System.Drawing.Point(116, 174);
-            this.txtTableName.Name = "txtTableName";
-            this.txtTableName.Size = new System.Drawing.Size(121, 19);
-            this.txtTableName.TabIndex = 0;
-            this.txtTableName.Leave += new System.EventHandler(this.txtTableName_ModifiedChanged);
             // 
             // label1
             // 
@@ -98,7 +96,7 @@ namespace PaidVersionInsert
             // 
             this.txtValueCondition.Location = new System.Drawing.Point(116, 242);
             this.txtValueCondition.Name = "txtValueCondition";
-            this.txtValueCondition.Size = new System.Drawing.Size(121, 19);
+            this.txtValueCondition.Size = new System.Drawing.Size(199, 19);
             this.txtValueCondition.TabIndex = 6;
             // 
             // label5
@@ -114,13 +112,13 @@ namespace PaidVersionInsert
             // 
             this.txtNameDictionary.Location = new System.Drawing.Point(116, 279);
             this.txtNameDictionary.Name = "txtNameDictionary";
-            this.txtNameDictionary.Size = new System.Drawing.Size(121, 19);
+            this.txtNameDictionary.Size = new System.Drawing.Size(199, 19);
             this.txtNameDictionary.TabIndex = 8;
             // 
             // richTextBox
             // 
             this.richTextBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.richTextBox.Location = new System.Drawing.Point(307, 136);
+            this.richTextBox.Location = new System.Drawing.Point(345, 136);
             this.richTextBox.Name = "richTextBox";
             this.richTextBox.Size = new System.Drawing.Size(584, 259);
             this.richTextBox.TabIndex = 10;
@@ -128,7 +126,7 @@ namespace PaidVersionInsert
             // 
             // btnGrnCode
             // 
-            this.btnGrnCode.Location = new System.Drawing.Point(12, 372);
+            this.btnGrnCode.Location = new System.Drawing.Point(12, 401);
             this.btnGrnCode.Name = "btnGrnCode";
             this.btnGrnCode.Size = new System.Drawing.Size(75, 23);
             this.btnGrnCode.TabIndex = 11;
@@ -146,7 +144,7 @@ namespace PaidVersionInsert
             this.cboDbName.Name = "cboDbName";
             this.cboDbName.Size = new System.Drawing.Size(121, 20);
             this.cboDbName.TabIndex = 19;
-            this.cboDbName.Leave += new System.EventHandler(this.cboDbName_Leave);
+            this.cboDbName.TextChanged += new System.EventHandler(this.cboDbName_TextChanged);
             // 
             // cboColumnNull
             // 
@@ -165,7 +163,7 @@ namespace PaidVersionInsert
             this.cboKeyCondition.IntegralHeight = false;
             this.cboKeyCondition.Location = new System.Drawing.Point(116, 209);
             this.cboKeyCondition.Name = "cboKeyCondition";
-            this.cboKeyCondition.Size = new System.Drawing.Size(121, 20);
+            this.cboKeyCondition.Size = new System.Drawing.Size(199, 20);
             this.cboKeyCondition.TabIndex = 21;
             // 
             // cbDefaultName
@@ -180,7 +178,7 @@ namespace PaidVersionInsert
             // 
             // btnCopy
             // 
-            this.btnCopy.Location = new System.Drawing.Point(816, 415);
+            this.btnCopy.Location = new System.Drawing.Point(854, 415);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(75, 23);
             this.btnCopy.TabIndex = 23;
@@ -191,7 +189,7 @@ namespace PaidVersionInsert
             // cbShowMessCopy
             // 
             this.cbShowMessCopy.AutoSize = true;
-            this.cbShowMessCopy.Location = new System.Drawing.Point(686, 419);
+            this.cbShowMessCopy.Location = new System.Drawing.Point(712, 419);
             this.cbShowMessCopy.Name = "cbShowMessCopy";
             this.cbShowMessCopy.Size = new System.Drawing.Size(112, 16);
             this.cbShowMessCopy.TabIndex = 24;
@@ -228,11 +226,82 @@ namespace PaidVersionInsert
             this.cboDataNull.Text = "Output Data null";
             this.cboDataNull.UseVisualStyleBackColor = true;
             // 
+            // cbValueTop1
+            // 
+            this.cbValueTop1.AutoSize = true;
+            this.cbValueTop1.Location = new System.Drawing.Point(150, 372);
+            this.cbValueTop1.Name = "cbValueTop1";
+            this.cbValueTop1.Size = new System.Drawing.Size(119, 16);
+            this.cbValueTop1.TabIndex = 28;
+            this.cbValueTop1.Text = "Defaut value top 1";
+            this.cbValueTop1.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(31, 20);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(117, 12);
+            this.label6.TabIndex = 29;
+            this.label6.Text = "Convert name method";
+            // 
+            // txtNameOldParam
+            // 
+            this.txtNameOldParam.Location = new System.Drawing.Point(163, 18);
+            this.txtNameOldParam.Name = "txtNameOldParam";
+            this.txtNameOldParam.Size = new System.Drawing.Size(100, 19);
+            this.txtNameOldParam.TabIndex = 30;
+            this.txtNameOldParam.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
+            // txtNameNewParam
+            // 
+            this.txtNameNewParam.Location = new System.Drawing.Point(298, 17);
+            this.txtNameNewParam.Name = "txtNameNewParam";
+            this.txtNameNewParam.Size = new System.Drawing.Size(100, 19);
+            this.txtNameNewParam.TabIndex = 31;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(269, 21);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(23, 12);
+            this.label7.TabIndex = 32;
+            this.label7.Text = "-->";
+            // 
+            // cboTableName
+            // 
+            this.cboTableName.FormattingEnabled = true;
+            this.cboTableName.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.cboTableName.IntegralHeight = false;
+            this.cboTableName.Location = new System.Drawing.Point(116, 174);
+            this.cboTableName.Name = "cboTableName";
+            this.cboTableName.Size = new System.Drawing.Size(199, 20);
+            this.cboTableName.TabIndex = 33;
+            this.cboTableName.TextChanged += new System.EventHandler(this.cboTableName_TextChanged);
+            // 
+            // btnCopyNewParam
+            // 
+            this.btnCopyNewParam.Location = new System.Drawing.Point(413, 14);
+            this.btnCopyNewParam.Name = "btnCopyNewParam";
+            this.btnCopyNewParam.Size = new System.Drawing.Size(75, 23);
+            this.btnCopyNewParam.TabIndex = 34;
+            this.btnCopyNewParam.Text = "Copy";
+            this.btnCopyNewParam.UseVisualStyleBackColor = true;
+            this.btnCopyNewParam.Click += new System.EventHandler(this.btnCopyNewParam_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(941, 467);
+            this.Controls.Add(this.btnCopyNewParam);
+            this.Controls.Add(this.cboTableName);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.txtNameNewParam);
+            this.Controls.Add(this.txtNameOldParam);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.cbValueTop1);
             this.Controls.Add(this.cboDataNull);
             this.Controls.Add(this.cboDefautDataEmpty);
             this.Controls.Add(this.btnSettingDatabase);
@@ -251,7 +320,6 @@ namespace PaidVersionInsert
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtTableName);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -261,8 +329,6 @@ namespace PaidVersionInsert
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox txtTableName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -281,6 +347,13 @@ namespace PaidVersionInsert
         private System.Windows.Forms.Button btnSettingDatabase;
         private System.Windows.Forms.CheckBox cboDefautDataEmpty;
         private System.Windows.Forms.CheckBox cboDataNull;
+        private System.Windows.Forms.CheckBox cbValueTop1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtNameOldParam;
+        private System.Windows.Forms.TextBox txtNameNewParam;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox cboTableName;
+        private System.Windows.Forms.Button btnCopyNewParam;
     }
 }
 
