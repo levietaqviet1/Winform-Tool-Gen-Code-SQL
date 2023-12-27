@@ -132,6 +132,22 @@ namespace PaidVersionInsert
             txtNameDictionary.Text = dicInsertName;
 
             richTextBox.Text = AutoGenInsertDataCode().ToString();
+
+            Dictionary<string, object> dicCondition = new Dictionary<string, object>();
+            dicCondition["TABLE_NAME"] = tableName;
+            dicCondition["TABLE_TYPE"] = "VIEW";
+
+            result = crudData.Select(dicCondition, "INFORMATION_SCHEMA.TABLES", dbName);
+            if(result.Data.Rows.Count > 0)
+            {
+                lbTypeTable.Text = "View";
+                lbTypeTable.ForeColor = Color.Red;
+            }
+            else
+            {
+                lbTypeTable.Text = "Table";
+                lbTypeTable.ForeColor = Color.Green;
+            }
         }
 
         private string ConvertToCamelCase(string input)
