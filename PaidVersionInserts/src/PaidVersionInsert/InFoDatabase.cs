@@ -11,10 +11,11 @@ namespace PaidVersionInsert
         public string ServerName { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public bool Choice { get; set; }
 
         public override string ToString()
         {
-            return $"{ServerName}\n{Login}\n{Password}";
+            return $"{ServerName}\t@\t{Login}\t@\t{Password}\t@\t{Choice}\n";
         }
     }
 }

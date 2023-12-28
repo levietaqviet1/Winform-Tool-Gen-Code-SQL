@@ -14,6 +14,7 @@ namespace PaidVersionInsert
     {
         private Utills utills = new Utills();
         private InFoDatabase inFoDatabase = new InFoDatabase();
+        private List<InFoDatabase> inFoDatabases = new List<InFoDatabase>();
         private CRUD_DataTest cRUD_DataTest;
         private CommonResult result;
         public bool check;
@@ -26,9 +27,11 @@ namespace PaidVersionInsert
 
         private void btnSubmit_Click(object sender, EventArgs e)
         {
-            inFoDatabase.ServerName = tbServerName.Text.Trim();
+            inFoDatabase = new InFoDatabase();
+            inFoDatabase.ServerName = cboServerName.Text ?? "";
             inFoDatabase.Login = tbLogin.Text.Trim();
             inFoDatabase.Password = tbPassword.Text.Trim();
+
             if (Validate())
             {
                 cRUD_DataTest = new CRUD_DataTest(inFoDatabase);
@@ -40,7 +43,45 @@ namespace PaidVersionInsert
                 if (result.Status)
                 {
                     MessageBox.Show("Connect Done");
-                    utills.SaveTextToFile(inFoDatabase.ToString(), "Setting.txt");
+
+                    inFoDatabase.Choice = true;
+
+                    bool checkChoice = false;
+
+                    inFoDatabases = utills.GetInFoDatabases("Setting.txt");
+
+                    for (int i = 0; i < inFoDatabases.Count; i++)
+                    {
+                        if (inFoDatabases[i].ServerName.Equals(inFoDatabase.ServerName))
+                        {
+                            //if (!inFoDatabases[i].Login.Equals(inFoDatabase.Login) || !inFoDatabases[i].Password.Equals(inFoDatabase.Password))
+                            //{
+                            //    inFoDatabases[i].Login = inFoDatabase.Login;
+                            //    inFoDatabases[i].Password = inFoDatabase.Password;
+                            //}
+
+                            inFoDatabases[i].Choice = true;
+                            checkChoice = true;
+                        }
+                        else
+                        {
+                            inFoDatabases[i].Choice = false;
+                        }
+                    }
+
+                    if (!checkChoice)
+                    {
+                        inFoDatabases.Add(inFoDatabase);
+                    }
+
+                    inFoDatabases = inFoDatabases.OrderByDescending(x => x.Choice).ToList();
+
+                    string str = "";
+                    foreach (var item in inFoDatabases)
+                    {
+                        str += item.ToString();
+                    }
+                    utills.SaveTextToFile(str, "Setting.txt");
                     this.Hide();
                     DialogResult result = new Form1().ShowDialog();
                     if (result == DialogResult.OK) // hoặc result là giá trị nút đóng dialog mà bạn xác định
@@ -67,19 +108,38 @@ namespace PaidVersionInsert
 
         private void Load()
         {
-            List<string> listData = utills.ReadLinesFromFile("Setting.txt");
-            try
+            inFoDatabases = utills.GetInFoDatabases("Setting.txt");
+            cboServerName.DataSource = inFoDatabases;
+            cboServerName.DisplayMember = "ServerName";
+
+            tbLogin.DataBindings.Clear();
+            tbLogin.DataBindings.Add("Text", inFoDatabases, "Login");
+
+            tbPassword.DataBindings.Clear();
+            tbPassword.DataBindings.Add("Text", inFoDatabases, "Password");
+
+            for (int i = 0; i < inFoDatabases.Count; i++)
             {
-                if (listData.Count >= 3)
+                if (inFoDatabases[i].Choice)
                 {
-                    inFoDatabase.ServerName = listData[0].Trim();
-                    inFoDatabase.Login = listData[1].Trim();
-                    inFoDatabase.Password = listData[2].Trim();
+                    cboServerName.SelectedIndex = i;
+                    inFoDatabase = inFoDatabases.ToList()[i];
+                    break;
                 }
             }
-            finally
-            {
-            }
+            //List<string> listData = utills.ReadLinesFromFile("Setting.txt");
+            //try
+            //{
+            //    if (listData.Count >= 3)
+            //    {
+            //        inFoDatabase.ServerName = listData[0].Trim();
+            //        inFoDatabase.Login = listData[1].Trim();
+            //        inFoDatabase.Password = listData[2].Trim();
+            //    }
+            //}
+            //finally
+            //{
+            //}
             if (Validate())
             {
                 cRUD_DataTest = new CRUD_DataTest(inFoDatabase);
@@ -89,9 +149,9 @@ namespace PaidVersionInsert
                 if (result.Status)
                 {
                     MessageBox.Show("Connect Done");
-                    tbServerName.Text = inFoDatabase.ServerName;
-                    tbLogin.Text = inFoDatabase.Login;
-                    tbPassword.Text = inFoDatabase.Password;
+                    //tbServerName.Text = inFoDatabase.ServerName;
+                    //tbLogin.Text = inFoDatabase.Login;
+                    //tbPassword.Text = inFoDatabase.Password;
                     if (check)
                     {
                         this.Close();

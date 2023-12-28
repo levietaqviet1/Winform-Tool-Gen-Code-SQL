@@ -34,47 +34,82 @@ namespace PaidVersionInsert
 
         private void CheckConnectSQL()
         {
-            List<string> listData = utills.ReadLinesFromFile("Setting.txt");
-            inFoDatabase = new InFoDatabase();
-            try
-            {
-                if (listData.Count >= 3)
-                {
-                    inFoDatabase.ServerName = listData[0].Trim();
-                    inFoDatabase.Login = listData[1].Trim();
-                    inFoDatabase.Password = listData[2].Trim();
-                }
-            }
-            finally
-            {
-            }
-            if (!(String.IsNullOrEmpty(inFoDatabase.ServerName) || String.IsNullOrEmpty(inFoDatabase.Login) || String.IsNullOrEmpty(inFoDatabase.Password)))
-            {
-                crudData = new CRUD_DataTest(inFoDatabase);
-                StringBuilder sb = new StringBuilder();
-                sb.Append("SELECT * FROM sys.databases ");
-                CommonResult result = crudData.ExecuteQuery(null, sb);
+            List<InFoDatabase> listData = utills.GetInFoDatabases("Setting.txt");
 
-                if (!result.Status)
-                {
-                    this.Close();
-                    DialogResult rs = new SettingDB(false).ShowDialog();
+            if(listData.Count > 0)
+            {
+                inFoDatabase = listData[0];
 
-                    if (rs == DialogResult.OK) // hoặc result là giá trị nút đóng dialog mà bạn xác định
+                if (!(String.IsNullOrEmpty(inFoDatabase.ServerName) || String.IsNullOrEmpty(inFoDatabase.Login) || String.IsNullOrEmpty(inFoDatabase.Password)))
+                {
+                    crudData = new CRUD_DataTest(inFoDatabase);
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("SELECT * FROM sys.databases ");
+                    CommonResult result = crudData.ExecuteQuery(null, sb);
+
+                    if (!result.Status)
                     {
-                        Application.Exit(); // Đóng chương trình
+                        this.Close();
+                        DialogResult rse = new SettingDB(false).ShowDialog();
+
+                        if (rse == DialogResult.OK) // hoặc result là giá trị nút đóng dialog mà bạn xác định
+                        {
+                            Application.Exit(); // Đóng chương trình
+                        }
                     }
+                    return;
                 }
+               
             }
-            else
+
+
+            this.Close();
+            DialogResult rs = new SettingDB(false).ShowDialog();
+            if (rs == DialogResult.OK) // hoặc result là giá trị nút đóng dialog mà bạn xác định
             {
-                this.Close();
-                DialogResult rs = new SettingDB(false).ShowDialog();
-                if (rs == DialogResult.OK) // hoặc result là giá trị nút đóng dialog mà bạn xác định
-                {
-                    Application.Exit(); // Đóng chương trình
-                }
+                Application.Exit(); // Đóng chương trình
             }
+
+            //inFoDatabase = new InFoDatabase();
+            //try
+            //{
+            //    if (listData.Count >= 3)
+            //    {
+            //        inFoDatabase.ServerName = listData[0].Trim();
+            //        inFoDatabase.Login = listData[1].Trim();
+            //        inFoDatabase.Password = listData[2].Trim();
+            //    }
+            //}
+            //finally
+            //{
+            //}
+            //if (!(String.IsNullOrEmpty(inFoDatabase.ServerName) || String.IsNullOrEmpty(inFoDatabase.Login) || String.IsNullOrEmpty(inFoDatabase.Password)))
+            //{
+            //    crudData = new CRUD_DataTest(inFoDatabase);
+            //    StringBuilder sb = new StringBuilder();
+            //    sb.Append("SELECT * FROM sys.databases ");
+            //    CommonResult result = crudData.ExecuteQuery(null, sb);
+
+            //    if (!result.Status)
+            //    {
+            //        this.Close();
+            //        DialogResult rs = new SettingDB(false).ShowDialog();
+
+            //        if (rs == DialogResult.OK) // hoặc result là giá trị nút đóng dialog mà bạn xác định
+            //        {
+            //            Application.Exit(); // Đóng chương trình
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    this.Close();
+            //    DialogResult rs = new SettingDB(false).ShowDialog();
+            //    if (rs == DialogResult.OK) // hoặc result là giá trị nút đóng dialog mà bạn xác định
+            //    {
+            //        Application.Exit(); // Đóng chương trình
+            //    }
+            //}
         }
 
         private void Validate()

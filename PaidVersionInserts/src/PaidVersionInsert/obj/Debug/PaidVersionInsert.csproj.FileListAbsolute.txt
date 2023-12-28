@@ -69,3 +69,4 @@ C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\
 C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.csproj.CoreCompileInputs.cache
 C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.exe
 C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.pdb
+C:\Users\Administrator\Desktop\Winform-Tool-Gen-Code-SQL\PaidVersionInserts\src\PaidVersionInsert\obj\Debug\PaidVersionInsert.csproj.AssemblyReference.cache
